@@ -4,7 +4,7 @@ module.exports = defineConfig({
   configureWebpack: {
     resolve: {
       alias: {
-        'assets':'@/aassets',
+        'assets':'@/assets',
         'components':'@/components',
         'network':'@/network',
         'views':'@/views',
