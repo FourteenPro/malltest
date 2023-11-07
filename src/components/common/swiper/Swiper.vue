@@ -1,6 +1,6 @@
 <template>
     <div class="small-swiper">
-        <div class="swiper">
+        <div class="swiper" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
             <slot></slot>
         </div>
         <div class="indicator">
@@ -20,6 +20,10 @@
             transformTime: {
                 type: Number,
                 default: 300,
+            },
+            dragRatio: {
+                type: Number,
+                default: 0.25
             }
         },
         mounted () {
@@ -35,25 +39,41 @@
                 slideLen: 0,  // 记录图片的数量
                 dispayWidth: 0, // 记录显示宽度
                 swiperStyle: {}, // 记录swiper的样式对象
-                carouselIndex: 1 // 设置每次轮播几张图片
+                carouselIndex: 1, // 设置每次轮播几张图片
+                carouselTimer: '', // 记录轮播图定时器
+                scrolling: false, // 记录是否在滚动 true--滚动， false--没有滚动
+                startX: '',  // 触摸的x轴坐标
+                endX: '',    // 移动后的x轴坐标
+                moveWidth: '',  // 移动的距离
             }
         },
         methods:{
 
             swiperCarousel() { // 轮播图片
-                setInterval(() => {
+                this.carouselTimer = setInterval(() => {
 
                     this.carouselIndex++
-                    this.swiperStyle['transition'] = `transform ${this.transformTime}ms` // 设置动画时长
-                    this.swiperTransform(this.carouselIndex*this.dispayWidth)  // 移动到新位置
-                    this.swiperCorrect()  // 位置矫正
+                    this.swiperscroll(this.carouselIndex*this.dispayWidth)
+                    
                 },this.carouselTime)  // 设置每次轮播时间
+            },
+            swiperscroll(position){  // 滚动
+
+                this.scrolling = true  // 设置滚动状态
+                this.swiperStyle['transition'] = `transform ${this.transformTime}ms` // 设置动画时长
+                this.swiperTransform(position)  // 移动到新位置
+                this.swiperCorrect()  // 位置矫正
+
+                this.scrolling = false  // 设置结束滚动状态
             },
             swiperCorrect(){  // 位置矫正
                 setTimeout(()=>{
                     this.swiperStyle['transition'] = '0ms' // 设置动画时长为0
                     if(this.carouselIndex >= this.slideLen+1){
                         this.carouselIndex = 1
+                        this.swiperTransform(this.carouselIndex*this.dispayWidth)
+                    }else if(this.carouselIndex <= 0){
+                        this.carouselIndex = this.slideLen
                         this.swiperTransform(this.carouselIndex*this.dispayWidth)
                     }
                 },this.transformTime)  // 执行延时就是动画的时长,避免还没动画完成就矫正了，没有动画效果
@@ -81,7 +101,34 @@
                 this.swiperStyle['transform'] = `translate3d(${-position}px,0,0)`
                 this.swiperStyle['-webkit-transform'] = `translate3d(${-position}px,0,0)`  // 考虑浏览器兼容
                 this.swiperStyle['-ms-transform'] = `translate3d(${-position}px,0,0)`     // 考虑浏览器兼容
-            }
+            },
+            touchStart(e){  // 触摸显示屏
+                // 判断是否在滚动
+                if(this.scrolling) return
+                // 没有在滚动则继续执行
+                clearInterval(this.carouselTimer)// 停止定时器
+
+                this.startX = e.touches[0].pageX// 获取触点的x轴位置
+            },
+            touchMove(e){ // 拖动显示屏
+                this.endX = e.touches[0].pageX  // 获取拖动后的x轴位置
+                this.moveWidth = this.endX - this.startX // 计算移动的距离
+                this.swiperTransform(this.carouselIndex * this.dispayWidth - this.moveWidth)  // 移动到拖动的位置
+            },
+            touchEnd(e){  // 离开显示屏
+                let mathWidth = Math.abs(this.moveWidth)
+                if(this.moveWidth===0){
+                     return
+                }else if(this.moveWidth > 0 && mathWidth > this.dispayWidth * this.dragRatio){
+                    this.carouselIndex --
+                }else if (this.moveWidth < 0 && mathWidth > this.dispayWidth * this.dragRatio){
+                    this.carouselIndex ++
+                }
+                
+                this.swiperscroll(this.carouselIndex * this.dispayWidth)// 设置位置
+                
+                this.swiperCarousel() // 开始滚动
+            },
         }
     }
 </script>
