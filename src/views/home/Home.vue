@@ -5,6 +5,30 @@
         </nav-bar>
         <home-swiper :banner="banner"></home-swiper>
         <home-recommend :recommend="recommend"></home-recommend>
+        <home-feature></home-feature>
+
+        <ul>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+            <li>你好</li>
+        </ul>
     </div>
 </template>
 
@@ -12,13 +36,15 @@
     import NavBar from 'components/common/navBar/NavBar' 
     import HomeSwiper from "views/home/childComps/HomeSwiper"
     import HomeRecommend from "views/home/childComps/HomeRecommend"
+    import HomeFeature from "views/home/childComps/HomeFeature"
     import {getHomeMultidata} from 'network/home'
     export default{
         name: 'home',
         components:{
             NavBar,
             HomeSwiper,
-            HomeRecommend
+            HomeRecommend,
+            HomeFeature
         },
         data () {
             return {
@@ -42,9 +68,17 @@
 </script>
 
 <style>
+    #home{
+        padding-top: 44px;
+    }
     .home-nav { 
         background-color: #ff8e96;
         color: #fff;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 99;
     }
     
     
