@@ -13,17 +13,17 @@
     export default{
         name: 'swiper',
         props: {
-            carouselTime: {
+            carouselTime: {  // 设置翻页间隔时间
                 type: Number,
                 default: 3000,
             },
-            transformTime: {
+            transformTime: {  // 设置动画时间
                 type: Number,
                 default: 300,
             },
-            dragRatio: {
+            dragRatio: {  // 设置移动百分比为多少就翻一页
                 type: Number,
-                default: 0.25
+                default: 0.3
             }
         },
         mounted () {

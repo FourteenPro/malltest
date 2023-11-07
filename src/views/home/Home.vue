@@ -3,28 +3,29 @@
         <nav-bar class="home-nav">
             <div slot="center">购物街</div>
         </nav-bar>
-        <home-swiper :banner="banner">
- 
-        </home-swiper>
+        <home-swiper :banner="banner"></home-swiper>
+        <home-recommend :recommend="recommend"></home-recommend>
     </div>
 </template>
 
 <script>
     import NavBar from 'components/common/navBar/NavBar' 
     import HomeSwiper from "views/home/childComps/HomeSwiper"
+    import HomeRecommend from "views/home/childComps/HomeRecommend"
     import {getHomeMultidata} from 'network/home'
     export default{
         name: 'home',
         components:{
             NavBar,
-            HomeSwiper
+            HomeSwiper,
+            HomeRecommend
         },
         data () {
             return {
                 banner:[], // 轮播图数据
                 dKeyword: {},
                 keywords: {},
-                recommend: {},
+                recommend: [],
             }
         },
         created() {
@@ -33,7 +34,7 @@
                 this.banner = res.data.banner.list
                 this.dKeyword = res.data.dKeyword
                 this.keywords = res.data.keywords
-                this.recommend = res.data.recommend
+                this.recommend = res.data.recommend.list
             })
         }
 
