@@ -53,7 +53,5 @@
         vertical-align: middle;
         margin-bottom: 2px;
     }
-    .active {
-        color: #ff5777
-    }
+    
 </style>
