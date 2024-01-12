@@ -3,7 +3,7 @@
         <nav-bar class="home-nav">
             <div slot="center">购物街</div>
         </nav-bar>
-        <scroll class="content">
+        <scroll class="content" ref="scroll" :probeType="3" @scrollMove="scrollMove">
             <home-swiper :banner="banner"></home-swiper>
             <home-recommend :recommend="recommend"></home-recommend>
             <home-feature></home-feature>
@@ -11,6 +11,7 @@
                 :controlTitles="['流行','新款','精选']" @tabClick="tabClick" />
             <goods-list :goodsList="goods[currentType].list"/>
         </scroll>
+        <back-top @click.native="backClick" v-show="backShow"/>
     </div>
 </template>
 
@@ -28,6 +29,7 @@
     import newsImg from 'assets/img/goods/news1.jpg'
 
     import Scroll from 'components/common/scroll/Scroll'
+    import BackTop from 'components/content/backTop/BackTop'
 
     import {getHomeMultidata,getHomeGoods} from 'network/home'
     export default{
@@ -39,7 +41,8 @@
             HomeFeature,
             TabControl,
             GoodsList,
-            Scroll
+            Scroll,
+            BackTop
         },
         data () {
             return {
@@ -92,7 +95,8 @@
                     title: '美拉德毛毛外套女厚款秋冬季新款毛绒外套气质外套女26705#',
                     price: '99.00',
                     cfav:'2523'
-                }
+                },
+                backShow: false,
             }
         },
         created() {
@@ -124,6 +128,13 @@
                         this.currentType = 'sell'
                         break
                 }
+             },
+             backClick() {  // 点击滚动回到顶部
+                this.$refs.scroll.setScrollTo(0,0,500)
+             },
+             scrollMove(position) {  // 监听滚动事件
+                console.log(position)
+                this.backShow = -position.y > 1000
              },
             /**
              * 网络请求相关的方法
