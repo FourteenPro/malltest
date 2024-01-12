@@ -3,12 +3,14 @@
         <nav-bar class="home-nav">
             <div slot="center">购物街</div>
         </nav-bar>
-        <home-swiper :banner="banner"></home-swiper>
-        <home-recommend :recommend="recommend"></home-recommend>
-        <home-feature></home-feature>
-        <tab-control class="tab-control" 
-            :controlTitles="['流行','新款','精选']" @tabClick="tabClick" />
-        <goods-list :goodsList="goods[currentType].list"/>
+        <scroll class="content">
+            <home-swiper :banner="banner"></home-swiper>
+            <home-recommend :recommend="recommend"></home-recommend>
+            <home-feature></home-feature>
+            <tab-control class="tab-control" 
+                :controlTitles="['流行','新款','精选']" @tabClick="tabClick" />
+            <goods-list :goodsList="goods[currentType].list"/>
+        </scroll>
     </div>
 </template>
 
@@ -25,6 +27,8 @@
     import popImg from 'assets/img/goods/pop1.jpg'
     import newsImg from 'assets/img/goods/news1.jpg'
 
+    import Scroll from 'components/common/scroll/Scroll'
+
     import {getHomeMultidata,getHomeGoods} from 'network/home'
     export default{
         name: 'home',
@@ -34,7 +38,8 @@
             HomeRecommend,
             HomeFeature,
             TabControl,
-            GoodsList
+            GoodsList,
+            Scroll
         },
         data () {
             return {
@@ -60,9 +65,9 @@
                     show: {
                         img:''
                     },
-                    title: '高腰显瘦加绒紧身弹力牛仔裤 592',
-                    price: '89.90',
-                    cfav:'2559'
+                    title: '2023新款纯色宽松连帽毛毛短外套 MW21928',
+                    price: '699.90',
+                    cfav:'888'
                 },
                 popData: {
                     show: {
@@ -71,6 +76,14 @@
                     title: '尘兮高端收官大衣',
                     price: '285.90',
                     cfav:'3541'
+                },
+                popData1: {
+                    show: {
+                        img:'~assets/img/goods/pop2.jpg'
+                    },
+                    title: '法式丝绒复古小香风棉服外套6092',
+                    price: '998.90',
+                    cfav:'369'
                 },
                 newsData: {
                     show: {
@@ -99,7 +112,7 @@
             /**
              * 事件监听相关方法
              */
-             tabClick(index){
+             tabClick(index){   // 监听商品分类切换
                 switch (index){
                     case 0:
                         this.currentType = 'pop'
@@ -115,7 +128,7 @@
             /**
              * 网络请求相关的方法
              */
-            getHomeMultidata() {
+            getHomeMultidata() {  // 获取轮播图
                 getHomeMultidata().then(res => {
                 console.log('首页部分的数据：', res)
                 this.banner = res.data.banner.list
@@ -152,24 +165,43 @@
     }
 </script>
 
-<style>
+<style scoped>
     #home{
-        padding-top: 44px;
+        /* padding-top: 44px; */
+        height: 100vh;
+        position: relative;
     }
     .home-nav { 
-        background-color: #ff8e96;
+        background-color: var(--color-tint);
         color: #fff;
         position: fixed;
         left: 0;
         right: 0;
         top: 0;
-        z-index: 99;
+        z-index: 9;
     }
     .tab-control{
         position: sticky;
         top: 44px;
         z-index: 9;
     }
-    
+
+    /* 两种计算滚动部分高度的方式 */
+
+    /* 利用calc来计算 */
+    /* .content {  
+        margin-top: 44px;
+        height: calc(100% - 93px);
+        overflow: hidden;
+    } */
+
+    /* 利用定位 单上下高度确定的时 */
+    .content {
+        position: absolute;
+        top: 44px;
+        bottom: 49px;
+        left: 0;
+        right: 0;
+    }
     
 </style>

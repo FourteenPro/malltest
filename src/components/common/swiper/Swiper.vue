@@ -31,7 +31,7 @@
                 this.swiperInit() // 轮播图初始化
 
                 this.swiperCarousel() // 轮播图开始轮播
-            },100)
+            },300)
             
         },
         data() {
