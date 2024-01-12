@@ -3,7 +3,7 @@
         <nav-bar class="home-nav">
             <div slot="center">购物街</div>
         </nav-bar>
-        <scroll class="content" ref="scroll" :probeType="3" @scrollMove="scrollMove">
+        <scroll class="content" ref="scroll" :probeType="3" @scrollMove="scrollMove" :pullUpLoad="true" @upload="upload">
             <home-swiper :banner="banner"></home-swiper>
             <home-recommend :recommend="recommend"></home-recommend>
             <home-feature></home-feature>
@@ -133,8 +133,11 @@
                 this.$refs.scroll.setScrollTo(0,0,500)
              },
              scrollMove(position) {  // 监听滚动事件
-                console.log(position)
                 this.backShow = -position.y > 1000
+             },
+             upload() {  // 监听上拉加载事件
+                console.log("上拉加载。。。")
+                this.getHomeGoods(this.currentType)
              },
             /**
              * 网络请求相关的方法
@@ -169,6 +172,7 @@
                         }
                     }
                     this.goods[type].page += 1
+                    this.$refs.scroll.scroll.finishPullUp()
                 })
             },
         }
