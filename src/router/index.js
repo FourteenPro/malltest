@@ -1,6 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+
+const originalPush = VueRouter.prototype.push   // 解决路由重复点击报错的方法
+VueRouter.prototype.push = function push(location) {
+	return originalPush.call(this, location).catch(err => err)
+}
+
+
 Vue.use(VueRouter)
 
 const Home = () => import("views/home/Home")
