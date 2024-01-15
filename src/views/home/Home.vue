@@ -3,12 +3,16 @@
         <nav-bar class="home-nav">
             <div slot="center">购物街</div>
         </nav-bar>
+        <tab-control class="tab-control" 
+                :controlTitles="['流行','新款','精选']" 
+                @tabClick="tabClick" ref="controlTop" v-show="controlState" :class="{'active-control': controlState}"/>
         <scroll class="content" ref="scroll" :probeType="3" @scrollMove="scrollMove" :pullUpLoad="true" @upload="upload">
-            <home-swiper :banner="banner"></home-swiper>
+            <home-swiper :banner="banner" @loadSwiper="loadSwiper"></home-swiper>
             <home-recommend :recommend="recommend"></home-recommend>
             <home-feature></home-feature>
             <tab-control class="tab-control" 
-                :controlTitles="['流行','新款','精选']" @tabClick="tabClick" />
+                :controlTitles="['流行','新款','精选']" 
+                @tabClick="tabClick" ref="control"/>
             <goods-list :goodsList="goods[currentType].list"/>
         </scroll>
         <back-top @click.native="backClick" v-show="backShow"/>
@@ -97,6 +101,8 @@
                     cfav:'2523'
                 },
                 backShow: false,
+                controlOffsetH: 0,
+                controlState: false,
             }
         },
         created() {
@@ -108,17 +114,15 @@
             this.getHomeGoods('sell')
             this.getHomeGoods('pop')
             this.getHomeGoods('news')
-           
-
-            
         },
         mounted() {
             const refresh = this.debounce(this.$refs.scroll.refresh,500)
             this.$bus.$on('loadGoodImg',() =>{
-                // this.$refs.scroll.refresh()
                 refresh()
-                
             })
+            // 获取 吸顶的组件的offsetTop
+            // this.controlOffsetH = this.$refs.control.$el.offsetTop  // 由于图片没有加载 在这里获取的offsetTop不准确   解决 ：监听图片加载后 在获取
+            // console.log('offset:',this.controlOffsetH)
         },
         methods: {
 
@@ -146,16 +150,26 @@
                         this.currentType = 'sell'
                         break
                 }
+                this.$refs.control.controlIndex = index
+                this.$refs.controlTop.controlIndex = index
             },
             backClick() {  // 点击滚动回到顶部
                 this.$refs.scroll.setScrollTo(0,0,500)
             },
             scrollMove(position) {  // 监听滚动事件
+                // 判断置顶按钮显示距离
                 this.backShow = -position.y > 1000
+                
+                // 判断选项系统效果距离
+                this.controlState = -position.y > this.controlOffsetH
             },
             upload() {  // 监听上拉加载事件
                 console.log("上拉加载。。。")
                 this.getHomeGoods(this.currentType)
+            },
+            loadSwiper() {  // 监听轮播图加载后的事件
+                this.controlOffsetH = this.$refs.control.$el.offsetTop  // 由于图片没有加载 在这里获取的offsetTop不准确   解决 ：监听图片加载后 在获取
+                console.log('offset:',this.controlOffsetH)
             },
             /**
              * 网络请求相关的方法
@@ -213,11 +227,11 @@
         top: 0;
         z-index: 9;
     }
-    .tab-control{
+    /* .tab-control{
         position: sticky;
         top: 44px;
         z-index: 9;
-    }
+    } */
 
     /* 两种计算滚动部分高度的方式 */
 
@@ -235,6 +249,12 @@
         bottom: 49px;
         left: 0;
         right: 0;
+    }
+    .active-control {
+        position: relative;
+        top: 44px;
+        left: 0;
+        z-index: 9;
     }
     
 </style>
