@@ -31,7 +31,7 @@
                 this.swiperInit() // 轮播图初始化
 
                 this.swiperCarousel() // 轮播图开始轮播
-            },300)
+            },100)
             
         },
         data() {
@@ -85,14 +85,18 @@
                 this.slideLen = slideElts.length  // 获取图的长度
                 console.log('slideLen:', this.slideLen)
 
-                const oneNode = slideElts[0].cloneNode(true)  // 获取slideElts第一个元素及其子元素的副本
-                const lastNode = slideElts[this.slideLen-1].cloneNode(true)  // 获取slideElts最后一个元素及其子元素的副本
+                if (this.slideLen>1){
+                    const oneNode = slideElts[0].cloneNode(true)  // 获取slideElts第一个元素及其子元素的副本 如果没有上面这个判断  这里有一个坑获取这里的节点是swiper-item 而这个标签是根据请求数据生成的，由于请求数据是异步的，如果服务器响应慢，数据还没有过来，就执行到这里，将会获取不到节点导致报错（问题待解决）
+                                                                 // 怎么解决这个问题  1 等请求回来在执行这个函数
+                    const lastNode = slideElts[this.slideLen-1].cloneNode(true)  // 获取slideElts最后一个元素及其子元素的副本
 
-                swiperElt.insertBefore(lastNode,slideElts[0]) // 向swiperElt最前面插入slideElts最后一个元素
-                swiperElt.appendChild(oneNode)  // 向swiperElt最后面添加slideElts第一个元素
+                    swiperElt.insertBefore(lastNode,slideElts[0]) // 向swiperElt最前面插入slideElts最后一个元素
+                    swiperElt.appendChild(oneNode)  // 向swiperElt最后面添加slideElts第一个元素
+                    
+                    this.dispayWidth = swiperElt.offsetWidth  // 获取轮播图的显示宽度
+                    this.swiperStyle = swiperElt.style  // 获取swiperElt的样式对象
+                }
                 
-                this.dispayWidth = swiperElt.offsetWidth  // 获取轮播图的显示宽度
-                this.swiperStyle = swiperElt.style  // 获取swiperElt的样式对象
 
                 this.swiperTransform(this.dispayWidth) // 显示第一张图片
 

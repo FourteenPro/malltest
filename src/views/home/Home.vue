@@ -108,15 +108,33 @@
             this.getHomeGoods('sell')
             this.getHomeGoods('pop')
             this.getHomeGoods('news')
+           
 
             
         },
+        mounted() {
+            const refresh = this.debounce(this.$refs.scroll.refresh,500)
+            this.$bus.$on('loadGoodImg',() =>{
+                // this.$refs.scroll.refresh()
+                refresh()
+                
+            })
+        },
         methods: {
 
+            debounce(func, delay){  // 防抖函数
+                let timer = null
+                return function(...args){
+                    if(timer) clearTimeout(timer)
+                    timer = setTimeout(() =>{
+                        func.apply(this,args)
+                    }, delay)
+                }
+            },
             /**
              * 事件监听相关方法
              */
-             tabClick(index){   // 监听商品分类切换
+            tabClick(index){   // 监听商品分类切换
                 switch (index){
                     case 0:
                         this.currentType = 'pop'
@@ -128,17 +146,17 @@
                         this.currentType = 'sell'
                         break
                 }
-             },
-             backClick() {  // 点击滚动回到顶部
+            },
+            backClick() {  // 点击滚动回到顶部
                 this.$refs.scroll.setScrollTo(0,0,500)
-             },
-             scrollMove(position) {  // 监听滚动事件
+            },
+            scrollMove(position) {  // 监听滚动事件
                 this.backShow = -position.y > 1000
-             },
-             upload() {  // 监听上拉加载事件
+            },
+            upload() {  // 监听上拉加载事件
                 console.log("上拉加载。。。")
                 this.getHomeGoods(this.currentType)
-             },
+            },
             /**
              * 网络请求相关的方法
              */
