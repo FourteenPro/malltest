@@ -1,5 +1,5 @@
 <template>
-    <div class="goods-item">
+    <div class="goods-item" @click="toDetail">
         <img :src="goodsItem.show.img" alt="" @load="loadImg">
         <div class="goods-info">
             <p class="tit">{{ goodsItem.title }}</p>
@@ -31,7 +31,14 @@
                 this.$bus.$emit('loadGoodImg')
                 
                
-            },  
+            },
+            toDetail(){ // 跳转详情
+                this.$router.push({
+                    path:'/detail/' + this.goodsItem.iid,
+                    
+                })
+
+            },
         }
     }
 </script>

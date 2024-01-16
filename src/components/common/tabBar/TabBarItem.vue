@@ -31,7 +31,7 @@
         },
         methods: {
             btnClick () {
-                console.log(this.linkUrl)
+                // console.log(this.linkUrl)
                 this.$router.push(this.linkUrl)
             }
         }

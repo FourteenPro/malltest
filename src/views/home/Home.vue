@@ -66,7 +66,8 @@
                     },
                     title: '高腰显瘦加绒紧身弹力牛仔裤 592',
                     price: '89.90',
-                    cfav:'2559'
+                    cfav:'2559',
+                    iid:'1m4xiic'
                 },
                 sellData1: {
                     show: {
@@ -74,7 +75,8 @@
                     },
                     title: '2023新款纯色宽松连帽毛毛短外套 MW21928',
                     price: '699.90',
-                    cfav:'888'
+                    cfav:'888',
+                    iid:'1lyp2vg'
                 },
                 popData: {
                     show: {
@@ -82,7 +84,8 @@
                     },
                     title: '尘兮高端收官大衣',
                     price: '285.90',
-                    cfav:'3541'
+                    cfav:'3541',
+                    iid:'1lrzvr8'
                 },
                 popData1: {
                     show: {
@@ -90,7 +93,8 @@
                     },
                     title: '法式丝绒复古小香风棉服外套6092',
                     price: '998.90',
-                    cfav:'369'
+                    cfav:'369',
+                    iid:'156'
                 },
                 newsData: {
                     show: {
@@ -98,7 +102,8 @@
                     },
                     title: '美拉德毛毛外套女厚款秋冬季新款毛绒外套气质外套女26705#',
                     price: '99.00',
-                    cfav:'2523'
+                    cfav:'2523',
+                    iid:'258'
                 },
                 backShow: false,
                 controlOffsetH: 0,
@@ -123,6 +128,14 @@
             // 获取 吸顶的组件的offsetTop
             // this.controlOffsetH = this.$refs.control.$el.offsetTop  // 由于图片没有加载 在这里获取的offsetTop不准确   解决 ：监听图片加载后 在获取
             // console.log('offset:',this.controlOffsetH)
+        },
+        activated() {
+            // 设置缓存的路由 可以用这个钩子函数
+            // 进入路由的时候触发
+            // 老版的scroll 会出现滚动距离不准确的问题 切换路由时导致 滚动不正确的问题   在退出路由的时候deactivated  报错滚动的y值 ，在进入路由的时候重新设置这个值，并且刷新路由  在这里不用
+        },
+        deactivated() {
+            // 设置缓存的路由(用keep-alive） 离开路由时触发
         },
         methods: {
 
