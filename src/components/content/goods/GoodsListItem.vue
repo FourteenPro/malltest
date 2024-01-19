@@ -37,8 +37,14 @@
                     path:'/detail/' + this.goodsItem.iid,
                     
                 })
+                // this.$router.push({
+                //     path: '/detail',
+                //     query: {
+                //         id: this.goodsItem.iid
+                //     }
+                // })
 
-            },
+            }, 
         }
     }
 </script>
