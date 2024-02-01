@@ -36,6 +36,7 @@
     import BackTop from 'components/content/backTop/BackTop'
 
     import {debounce} from 'common/utils'
+    import {itemObject} from 'common/mixin'
 
     import {getHomeMultidata,getHomeGoods} from 'network/home'
     export default{
@@ -50,6 +51,7 @@
             Scroll,
             BackTop
         },
+        mixins: [itemObject],
         data () {
             return {
                 banner:[], // 轮播图数据
@@ -140,8 +142,6 @@
             // 设置缓存的路由(用keep-alive） 离开路由时触发
         },
         methods: {
-
-            
             /**
              * 事件监听相关方法
              */
