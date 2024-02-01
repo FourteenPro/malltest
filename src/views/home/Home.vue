@@ -35,6 +35,8 @@
     import Scroll from 'components/common/scroll/Scroll'
     import BackTop from 'components/content/backTop/BackTop'
 
+    import {debounce} from 'common/utils'
+
     import {getHomeMultidata,getHomeGoods} from 'network/home'
     export default{
         name: 'home',
@@ -121,7 +123,7 @@
             this.getHomeGoods('news')
         },
         mounted() {
-            const refresh = this.debounce(this.$refs.scroll.refresh,500)
+            const refresh = debounce(this.$refs.scroll.refresh,500)
             this.$bus.$on('loadGoodImg',() =>{
                 refresh()
             })
@@ -139,15 +141,7 @@
         },
         methods: {
 
-            debounce(func, delay){  // 防抖函数
-                let timer = null
-                return function(...args){
-                    if(timer) clearTimeout(timer)
-                    timer = setTimeout(() =>{
-                        func.apply(this,args)
-                    }, delay)
-                }
-            },
+            
             /**
              * 事件监听相关方法
              */
